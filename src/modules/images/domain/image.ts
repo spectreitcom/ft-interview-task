@@ -2,10 +2,11 @@ import { AggregateRoot } from '@nestjs/cqrs';
 import { ImageId } from './value-objects/image-id';
 import { ImageSize } from './value-objects/image-size';
 import { ImageStatus } from './value-objects/image-status';
-import { ImageStatusChangedEvent } from './events/image-status-changed.event';
 import { ImageTitle } from './value-objects/image-title';
 import { ImageCreatedEvent } from './events/image-created.event';
 import { ProcessedImageEntity } from './entities/processed-image.entity';
+import { ImageProcessingFinishedEvent } from './events/image-processing-finished.event';
+import { ImageProcessingFailedEvent } from './events/image-processing-failed.event';
 
 type CreateImageInput = {
   imgWidth: number;
@@ -68,19 +69,19 @@ export class Image extends AggregateRoot {
     this.status = ImageStatus.processed();
     this.processedImage = processedImage;
     this.apply(
-      new ImageStatusChangedEvent(
+      new ImageProcessingFinishedEvent(
         this.imageId.value,
-        this.status.value,
-        processedImage.id,
+        this.title.value,
+        this.imageSize.width,
+        this.imageSize.height,
+        processedImage.url,
       ),
     );
   }
 
   failProcessing() {
     this.status = ImageStatus.failed();
-    this.apply(
-      new ImageStatusChangedEvent(this.imageId.value, this.status.value),
-    );
+    this.apply(new ImageProcessingFailedEvent(this.imageId.value));
   }
 
   getImageId() {
