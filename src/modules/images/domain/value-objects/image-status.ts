@@ -1,11 +1,11 @@
 import { IsIn, validateSync } from 'class-validator';
 
-const PROCESSING = 'PROCESSING';
-const PROCESSED = 'PROCESSED';
-const FAILED = 'FAILED';
+const PROCESSING_STATUS = 'PROCESSING';
+const PROCESSED_STATUS = 'PROCESSED';
+const FAILED_STATUS = 'FAILED';
 
 export class ImageStatus {
-  @IsIn([PROCESSING, PROCESSED, FAILED])
+  @IsIn([PROCESSING_STATUS, PROCESSED_STATUS, FAILED_STATUS])
   private readonly _value: string;
 
   private constructor(value: string) {
@@ -25,15 +25,15 @@ export class ImageStatus {
   }
 
   static processing() {
-    return new ImageStatus(PROCESSING);
+    return new ImageStatus(PROCESSING_STATUS);
   }
 
   static processed() {
-    return new ImageStatus(PROCESSED);
+    return new ImageStatus(PROCESSED_STATUS);
   }
 
   static failed() {
-    return new ImageStatus(FAILED);
+    return new ImageStatus(FAILED_STATUS);
   }
 
   equals(status: ImageStatus) {
