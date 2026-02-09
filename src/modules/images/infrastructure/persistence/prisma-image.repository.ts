@@ -9,24 +9,22 @@ export class PrismaImageRepository implements ImageRepository {
   constructor(private readonly prismaService: PrismaService) {}
 
   async save(image: Image): Promise<void> {
-    await this.prismaService.$transaction(async (prisma) => {
-      await prisma.image.upsert({
-        create: {
-          id: image.getImageId().value,
-          title: image.getTitle().value,
-          storageKey: image.getStorageKey(),
-          width: image.getImageSize().width,
-          height: image.getImageSize().height,
-          mimeType: image.getMimeType().value,
-        },
-        where: {
-          id: image.getImageId().value,
-        },
-        update: {
-          status: image.getStatus().value as ImageStatus,
-          url: image.getUrl()?.value,
-        },
-      });
+    await this.prismaService.image.upsert({
+      create: {
+        id: image.getImageId().value,
+        title: image.getTitle().value,
+        storageKey: image.getStorageKey(),
+        width: image.getImageSize().width,
+        height: image.getImageSize().height,
+        mimeType: image.getMimeType().value,
+      },
+      where: {
+        id: image.getImageId().value,
+      },
+      update: {
+        status: image.getStatus().value as ImageStatus,
+        url: image.getUrl()?.value,
+      },
     });
   }
 }
