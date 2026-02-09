@@ -10,14 +10,14 @@ import { ProcessedImageEntity } from './entities/processed-image.entity';
 type CreateImageInput = {
   imgWidth: number;
   imgHeight: number;
-  storageKey: string;
+  objectKey: string;
   imgTitle: string;
 };
 
 export class Image extends AggregateRoot {
   private readonly imageId: ImageId;
   private readonly imageSize: ImageSize;
-  private readonly storageKey: string;
+  private readonly objectKey: string;
   private readonly title: ImageTitle;
   private status: ImageStatus;
   private processedImage?: ProcessedImageEntity;
@@ -25,14 +25,14 @@ export class Image extends AggregateRoot {
   constructor(
     imageId: ImageId,
     imageSize: ImageSize,
-    storageKey: string,
+    objectKey: string,
     title: ImageTitle,
     processedImage?: ProcessedImageEntity,
   ) {
     super();
     this.imageId = imageId;
     this.imageSize = imageSize;
-    this.storageKey = storageKey;
+    this.objectKey = objectKey;
     this.title = title;
     this.status = ImageStatus.processing();
     this.processedImage = processedImage;
@@ -42,12 +42,12 @@ export class Image extends AggregateRoot {
     imgHeight,
     imgTitle,
     imgWidth,
-    storageKey,
+    objectKey,
   }: CreateImageInput) {
     const image = new Image(
       ImageId.create(),
       ImageSize.create(imgWidth, imgHeight),
-      storageKey,
+      objectKey,
       ImageTitle.fromString(imgTitle),
     );
 
@@ -56,7 +56,7 @@ export class Image extends AggregateRoot {
         image.imageId.value,
         imgWidth,
         imgHeight,
-        storageKey,
+        objectKey,
         imgTitle,
         image.status.value,
       ),
@@ -91,8 +91,8 @@ export class Image extends AggregateRoot {
     return this.imageSize;
   }
 
-  getStorageKey() {
-    return this.storageKey;
+  getObjectKey() {
+    return this.objectKey;
   }
 
   getStatus() {
@@ -105,5 +105,9 @@ export class Image extends AggregateRoot {
 
   getProcessedImage() {
     return this.processedImage;
+  }
+
+  get hasProcessedImage() {
+    return !!this.processedImage;
   }
 }
