@@ -4,52 +4,59 @@ import { ImageSize } from './value-objects/image-size';
 import { ImageStatus } from './value-objects/image-status';
 import { ImageTitle } from './value-objects/image-title';
 import { ImageCreatedEvent } from './events/image-created.event';
-import { ProcessedImageEntity } from './entities/processed-image.entity';
 import { ImageProcessingFinishedEvent } from './events/image-processing-finished.event';
 import { ImageProcessingFailedEvent } from './events/image-processing-failed.event';
+import { ImageMimeType } from './value-objects/image-mime-type';
+import { ImageUrl } from './value-objects/image-url';
 
 type CreateImageInput = {
   imgWidth: number;
   imgHeight: number;
-  objectKey: string;
+  storageKey: string;
   imgTitle: string;
+  imgMimeType: string;
 };
 
 export class Image extends AggregateRoot {
   private readonly imageId: ImageId;
   private readonly imageSize: ImageSize;
-  private readonly objectKey: string;
+  private readonly storageKey: string;
   private readonly title: ImageTitle;
+  private readonly mimeType: ImageMimeType;
   private status: ImageStatus;
-  private processedImage?: ProcessedImageEntity;
+  private url?: ImageUrl;
 
   constructor(
     imageId: ImageId,
     imageSize: ImageSize,
-    objectKey: string,
+    storageKey: string,
     title: ImageTitle,
-    processedImage?: ProcessedImageEntity,
+    mimeType: ImageMimeType,
+    url?: ImageUrl,
   ) {
     super();
     this.imageId = imageId;
     this.imageSize = imageSize;
-    this.objectKey = objectKey;
+    this.storageKey = storageKey;
     this.title = title;
     this.status = ImageStatus.processing();
-    this.processedImage = processedImage;
+    this.mimeType = mimeType;
+    this.url = url;
   }
 
   static create({
     imgHeight,
     imgTitle,
     imgWidth,
-    objectKey,
+    storageKey,
+    imgMimeType,
   }: CreateImageInput) {
     const image = new Image(
       ImageId.create(),
       ImageSize.create(imgWidth, imgHeight),
-      objectKey,
+      storageKey,
       ImageTitle.fromString(imgTitle),
+      ImageMimeType.fromString(imgMimeType),
     );
 
     image.apply(
@@ -57,7 +64,7 @@ export class Image extends AggregateRoot {
         image.imageId.value,
         imgWidth,
         imgHeight,
-        objectKey,
+        storageKey,
         imgTitle,
         image.status.value,
       ),
@@ -65,16 +72,16 @@ export class Image extends AggregateRoot {
     return image;
   }
 
-  finishProcessing(processedImage: ProcessedImageEntity) {
+  finishProcessing(url: string) {
     this.status = ImageStatus.processed();
-    this.processedImage = processedImage;
+    this.url = ImageUrl.fromString(url);
     this.apply(
       new ImageProcessingFinishedEvent(
         this.imageId.value,
         this.title.value,
         this.imageSize.width,
         this.imageSize.height,
-        processedImage.url,
+        url,
       ),
     );
   }
@@ -92,8 +99,8 @@ export class Image extends AggregateRoot {
     return this.imageSize;
   }
 
-  getObjectKey() {
-    return this.objectKey;
+  getStorageKey() {
+    return this.storageKey;
   }
 
   getStatus() {
@@ -104,11 +111,11 @@ export class Image extends AggregateRoot {
     return this.title;
   }
 
-  getProcessedImage() {
-    return this.processedImage;
+  getMimeType() {
+    return this.mimeType;
   }
 
-  get hasProcessedImage() {
-    return !!this.processedImage;
+  getUrl() {
+    return this.url;
   }
 }
