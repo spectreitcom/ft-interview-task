@@ -14,28 +14,19 @@ export class PrismaImageRepository implements ImageRepository {
         create: {
           id: image.getImageId().value,
           title: image.getTitle().value,
-          objectKey: image.getObjectKey(),
+          storageKey: image.getStorageKey(),
           width: image.getImageSize().width,
           height: image.getImageSize().height,
+          mimeType: image.getMimeType().value,
         },
         where: {
           id: image.getImageId().value,
         },
         update: {
           status: image.getStatus().value as ImageStatus,
+          url: image.getUrl()?.value,
         },
       });
-
-      if (image.hasProcessedImage) {
-        await prisma.processedImage.create({
-          data: {
-            id: image.getProcessedImage()?.id ?? '',
-            objectKey: image.getProcessedImage()?.objectKey ?? '',
-            url: image.getProcessedImage()?.url ?? '',
-            imageId: image.getImageId().value,
-          },
-        });
-      }
     });
   }
 }
