@@ -36,6 +36,8 @@ model ProcessedImage {
 
   image   Image  @relation(fields: [imageId], references: [id], onDelete: Cascade)
   imageId String @unique
+
+  @@map("processed_images")
 }
 
 // Read side
