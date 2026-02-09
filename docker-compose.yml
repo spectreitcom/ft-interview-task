@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:14.2-alpine
+    container_name: db
+    environment:
+      POSTGRES_DB: future_mind_db
+      POSTGRES_USER: future_mind_db
+      POSTGRES_PASSWORD: future_mind_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
