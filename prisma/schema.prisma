@@ -18,14 +18,24 @@ enum ImageStatus {
 }
 
 model Image {
-  id         String      @id @unique @default(uuid(4))
-  title      String      @db.VarChar(120)
-  storageKey String      @unique
-  width      Int
-  height     Int
-  status     ImageStatus @default(PROCESSED)
+  id             String          @id @unique @default(uuid(4))
+  title          String          @db.VarChar(120)
+  objectKey      String          @unique
+  width          Int
+  height         Int
+  status         ImageStatus     @default(PROCESSING)
+  processedImage ProcessedImage?
 
   @@map("images")
+}
+
+model ProcessedImage {
+  id        String @id @unique @default(uuid(4))
+  url       String
+  objectKey String
+
+  image   Image  @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  imageId String @unique
 }
 
 // Read side

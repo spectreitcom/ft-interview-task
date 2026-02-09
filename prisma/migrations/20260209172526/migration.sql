@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "images" ALTER COLUMN "status" SET DEFAULT 'PROCESSING';
