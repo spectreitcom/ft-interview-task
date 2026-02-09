@@ -5,3 +5,49 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+/**
+ * Images Bounded Context
+ */
+
+// Write side
+enum ImageStatus {
+  PROCESSING
+  PROCESSED
+  FAILED
+}
+
+model Image {
+  id             String          @id @unique @default(uuid(4))
+  title          String          @db.VarChar(120)
+  objectKey      String          @unique
+  width          Int
+  height         Int
+  status         ImageStatus     @default(PROCESSING)
+  processedImage ProcessedImage?
+
+  @@map("images")
+}
+
+model ProcessedImage {
+  id        String @id @unique @default(uuid(4))
+  url       String
+  objectKey String
+
+  image   Image  @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  imageId String @unique
+}
+
+// Read side
+model ImageRead {
+  id      String @id @unique @default(uuid(4))
+  imageId String @unique
+  title   String @db.VarChar(120)
+  width   Int
+  height  Int
+  url     String
+
+  @@index([title])
+  @@index([imageId])
+  @@map("image_read")
+}
