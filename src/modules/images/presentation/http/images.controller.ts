@@ -22,6 +22,8 @@ import {
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiCreatedResponse,
+  ApiBadRequestResponse,
+  ApiBody,
 } from '@nestjs/swagger';
 import { GetImagesQueryParamsDto } from './dto/get-images-query-params.dto';
 import {
@@ -42,6 +44,30 @@ export class ImagesController {
   @ApiOperation({ summary: 'Uploads an image' })
   @ApiCreatedResponse({
     description: 'The image has been uploaded successfully',
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid image or payload',
+  })
+  // todo: fix this doc
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+        width: {
+          type: 'number',
+        },
+        height: {
+          type: 'number',
+        },
+        title: {
+          type: 'string',
+        },
+      },
+    },
   })
   @Post()
   @UseInterceptors(FileInterceptor('file'))

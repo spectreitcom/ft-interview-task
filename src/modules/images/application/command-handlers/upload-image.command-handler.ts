@@ -3,12 +3,15 @@ import { UploadImageCommand } from '../commands/upload-image.command';
 import { ImageRepository } from '../ports/image.repository';
 import { Image } from '../../domain/image';
 import { ImageUploaderService } from '../ports/image-uploader.service';
+import { Logger } from '@nestjs/common';
 
 @CommandHandler(UploadImageCommand)
 export class UploadImageCommandHandler implements ICommandHandler<
   UploadImageCommand,
   void
 > {
+  private readonly logger = new Logger(UploadImageCommandHandler.name);
+
   constructor(
     private readonly imageRepository: ImageRepository,
     private readonly eventPublisher: EventPublisher,
@@ -34,8 +37,9 @@ export class UploadImageCommandHandler implements ICommandHandler<
       image.commit();
 
       // todo: add image to the queue
-    } catch {
-      // todo: handle error
+    } catch (e) {
+      this.logger.error('Failed to upload image', e);
+      throw e;
     }
   }
 }
