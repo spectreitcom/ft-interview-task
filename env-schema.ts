@@ -6,4 +6,5 @@ export const envSchema = joi.object({
   AWS_ACCESS_KEY_ID: joi.string().required(),
   AWS_SECRET_ACCESS_KEY: joi.string().required(),
   AWS_BUCKET: joi.string().required(),
+  REDIS_URL: joi.string().required(),
 });
