@@ -33,6 +33,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadImageCommand } from '../../application/commands/upload-image.command';
 import { UploadImageBodyDto } from './dto/upload-image-body.dto';
+import { allowedMimeTypeRegex } from '../../shared/utils';
 
 @Controller('images')
 export class ImagesController {
@@ -57,7 +58,7 @@ export class ImagesController {
         validators: [
           new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 2 }),
           new FileTypeValidator({
-            fileType: /^image\/(png|jpeg|webp|gif|svg+xml|tiff)$/,
+            fileType: allowedMimeTypeRegex,
           }),
         ],
       }),

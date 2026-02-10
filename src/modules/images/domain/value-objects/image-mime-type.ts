@@ -1,15 +1,9 @@
-import { IsIn, IsMimeType, validateSync } from 'class-validator';
+import { IsMimeType, Matches, validateSync } from 'class-validator';
+import { allowedMimeTypeRegex } from '../../shared/utils';
 
 export class ImageMimeType {
   @IsMimeType()
-  @IsIn([
-    'image/jpeg',
-    'image/png',
-    'image/webp',
-    'image/gif',
-    'image/svg+xml',
-    'image/tiff',
-  ])
+  @Matches(allowedMimeTypeRegex)
   private readonly _value: string;
 
   private constructor(value: string) {
