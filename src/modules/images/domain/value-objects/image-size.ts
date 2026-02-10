@@ -1,12 +1,14 @@
-import { IsNumber, IsPositive, validateSync } from 'class-validator';
+import { IsInt, IsNumber, IsPositive, validateSync } from 'class-validator';
 
 export class ImageSize {
   @IsNumber()
   @IsPositive()
+  @IsInt()
   private readonly _width: number;
 
   @IsNumber()
   @IsPositive()
+  @IsInt()
   private readonly _height: number;
 
   private constructor(width: number, height: number) {
