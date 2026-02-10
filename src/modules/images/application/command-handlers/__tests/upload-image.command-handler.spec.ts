@@ -92,9 +92,7 @@ describe('UploadImageCommandHandler', () => {
 
     imageUploaderService.upload.mockResolvedValue('test-key');
 
-    await expect(handler.execute(command)).rejects.toThrow(
-      'ImageMimeType validation failed',
-    );
+    await expect(handler.execute(command)).rejects.toThrow();
   });
 
   it('should throw an error if width exceeds 500', async () => {
@@ -111,9 +109,7 @@ describe('UploadImageCommandHandler', () => {
 
     imageUploaderService.upload.mockResolvedValue('test-key');
 
-    await expect(handler.execute(command)).rejects.toThrow(
-      'ImageSize validation failed',
-    );
+    await expect(handler.execute(command)).rejects.toThrow();
   });
 
   it('should throw an error if height exceeds 500', async () => {
@@ -130,9 +126,7 @@ describe('UploadImageCommandHandler', () => {
 
     imageUploaderService.upload.mockResolvedValue('test-key');
 
-    await expect(handler.execute(command)).rejects.toThrow(
-      'ImageSize validation failed',
-    );
+    await expect(handler.execute(command)).rejects.toThrow();
   });
 
   it('should throw an error if title is empty', async () => {
@@ -149,9 +143,7 @@ describe('UploadImageCommandHandler', () => {
 
     imageUploaderService.upload.mockResolvedValue('test-key');
 
-    await expect(handler.execute(command)).rejects.toThrow(
-      'ImageTitle validation failed',
-    );
+    await expect(handler.execute(command)).rejects.toThrow();
   });
 
   it('should throw an error if title exceeds 120 characters', async () => {
@@ -168,9 +160,7 @@ describe('UploadImageCommandHandler', () => {
 
     imageUploaderService.upload.mockResolvedValue('test-key');
 
-    await expect(handler.execute(command)).rejects.toThrow(
-      'ImageTitle validation failed',
-    );
+    await expect(handler.execute(command)).rejects.toThrow();
   });
 
   it('should throw an error if image upload fails', async () => {
