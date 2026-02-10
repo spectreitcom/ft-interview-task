@@ -70,7 +70,7 @@ export class Image extends AggregateRoot {
   }
 
   finishProcessing() {
-    if (this.status && this.status.equals(ImageStatus.failed())) {
+    if (this.status.equals(ImageStatus.failed())) {
       throw new ImageStatusChangeError();
     }
     this.status = ImageStatus.processed();
