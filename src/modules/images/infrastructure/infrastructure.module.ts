@@ -9,6 +9,7 @@ import { BullmqImageProcessingQueueService } from './image-processing/bullmq-ima
 import { BullModule } from '@nestjs/bullmq';
 import { IMAGE_PROCESSING_QUEUE } from './image-processing/constants';
 import { ImageProcessingQueueConsumer } from './image-processing/image-processing-queue.consumer';
+import { SharpService } from './image-processing/sharp.service';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { ImageProcessingQueueConsumer } from './image-processing/image-processin
       useClass: BullmqImageProcessingQueueService,
     },
     ImageProcessingQueueConsumer,
+    SharpService,
   ],
   exports: [ImageRepository, ImageUploaderService, ImageProcessingQueueService],
 })

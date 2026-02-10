@@ -3,6 +3,10 @@ import { Injectable } from '@nestjs/common';
 import { Image } from '../../domain/image';
 import { PrismaService } from '../../../../shared/prisma/prisma.service';
 import { ImageStatus } from '@prisma/client';
+import { ImageId } from '../../domain/value-objects/image-id';
+import { ImageSize } from '../../domain/value-objects/image-size';
+import { ImageTitle } from '../../domain/value-objects/image-title';
+import { ImageMimeType } from '../../domain/value-objects/image-mime-type';
 
 @Injectable()
 export class PrismaImageRepository implements ImageRepository {
@@ -23,8 +27,23 @@ export class PrismaImageRepository implements ImageRepository {
       },
       update: {
         status: image.getStatus().value as ImageStatus,
-        url: image.getUrl()?.value,
       },
     });
+  }
+
+  async findById(id: string): Promise<Image | null> {
+    const record = await this.prismaService.image.findUnique({
+      where: { id },
+    });
+
+    if (!record) return null;
+
+    return new Image(
+      ImageId.fromString(record.id),
+      ImageSize.create(record.width, record.height),
+      record.storageKey,
+      ImageTitle.fromString(record.title),
+      ImageMimeType.fromString(record.mimeType),
+    );
   }
 }
