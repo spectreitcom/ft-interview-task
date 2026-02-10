@@ -7,6 +7,7 @@ import { ImageCreatedEvent } from './events/image-created.event';
 import { ImageProcessingFinishedEvent } from './events/image-processing-finished.event';
 import { ImageProcessingFailedEvent } from './events/image-processing-failed.event';
 import { ImageMimeType } from './value-objects/image-mime-type';
+import { ImageStatusChangeError } from './exceptions';
 
 type CreateImageInput = {
   imgWidth: number;
@@ -69,6 +70,9 @@ export class Image extends AggregateRoot {
   }
 
   finishProcessing() {
+    if (this.status && this.status.equals(ImageStatus.failed())) {
+      throw new ImageStatusChangeError();
+    }
     this.status = ImageStatus.processed();
     this.apply(
       new ImageProcessingFinishedEvent(
