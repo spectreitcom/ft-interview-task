@@ -33,4 +33,10 @@ export class UploadImageBodyDto {
   @IsNotEmpty()
   @IsString()
   readonly title: string;
+
+  @ApiProperty({
+    description: 'The image file',
+    format: 'binary',
+  })
+  readonly file: any;
 }
