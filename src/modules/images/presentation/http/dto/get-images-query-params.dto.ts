@@ -13,6 +13,16 @@ export class GetImagesQueryParamsDto {
   readonly page: number = 1;
 
   @ApiPropertyOptional({
+    description: 'The number of items per page',
+    example: 10,
+    default: 10,
+  })
+  @IsNumber()
+  @IsPositive()
+  @IsOptional()
+  readonly pageSize: number = 10;
+
+  @ApiPropertyOptional({
     description: 'The image title to filter by',
     example: 'my image',
   })

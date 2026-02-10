@@ -12,7 +12,7 @@ export class GetImagesQueryHandler implements IQueryHandler<
   constructor(private readonly prismaService: PrismaService) {}
 
   async execute(query: GetImagesQuery): Promise<PaginatedData<ImageRead>> {
-    const { page, title } = query;
+    const { page, pageSize, title } = query;
 
     const data = await this.prismaService.imageRead.findMany({
       where: {
@@ -20,8 +20,8 @@ export class GetImagesQueryHandler implements IQueryHandler<
           contains: title,
         },
       },
-      skip: (page - 1) * 10,
-      take: 10,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
     });
 
     const total = await this.prismaService.imageRead.count({

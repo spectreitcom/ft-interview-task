@@ -35,7 +35,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadImageCommand } from '../../application/commands/upload-image.command';
 import { UploadImageBodyDto } from './dto/upload-image-body.dto';
-import { allowedMimeTypeRegex } from '../../shared/utils';
+import { allowedMimeTypeRegex, maxImageSize } from '../../shared/utils';
 import { PROCESSING_STATUS } from '../../domain/value-objects/image-status';
 
 @Controller('images')
@@ -67,7 +67,7 @@ export class ImagesController {
     @UploadedFile(
       new ParseFilePipe({
         validators: [
-          new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 2 }),
+          new MaxFileSizeValidator({ maxSize: maxImageSize }),
           new FileTypeValidator({
             fileType: allowedMimeTypeRegex,
           }),
@@ -98,7 +98,11 @@ export class ImagesController {
   async getImages(
     @Query() queryParamsDto: GetImagesQueryParamsDto,
   ): Promise<GetImagesResponseDto> {
-    const query = new GetImagesQuery(queryParamsDto.page, queryParamsDto.title);
+    const query = new GetImagesQuery(
+      queryParamsDto.page,
+      queryParamsDto.pageSize,
+      queryParamsDto.title,
+    );
     const result = await this.queryBus.execute<
       GetImagesQuery,
       PaginatedData<ImageRead>
