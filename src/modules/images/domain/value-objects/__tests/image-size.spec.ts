@@ -19,8 +19,12 @@ describe('ImageSize', () => {
       const height = 'invalid-height';
 
       // assert
-      // @ts-ignore
-      expect(() => ImageSize.create(width, height)).toThrow();
+      expect(() =>
+        ImageSize.create(
+          width as unknown as number,
+          height as unknown as number,
+        ),
+      ).toThrow();
     });
 
     it('should throw an error if the width or height are negative', () => {
@@ -56,8 +60,12 @@ describe('ImageSize', () => {
       const height = undefined;
 
       // assert
-      // @ts-ignore
-      expect(() => ImageSize.create(width, height)).toThrow();
+      expect(() =>
+        ImageSize.create(
+          width as unknown as number,
+          height as unknown as number,
+        ),
+      ).toThrow();
     });
   });
 
