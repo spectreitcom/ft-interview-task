@@ -26,6 +26,11 @@ export class PrismaImageRepository implements ImageRepository {
         id: image.getImageId().value,
       },
       update: {
+        title: image.getTitle().value,
+        storageKey: image.getStorageKey(),
+        width: image.getImageSize().width,
+        height: image.getImageSize().height,
+        mimeType: image.getMimeType().value,
         status: image.getStatus().value as ImageStatus,
       },
     });
