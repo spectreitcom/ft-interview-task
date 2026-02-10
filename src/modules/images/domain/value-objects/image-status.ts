@@ -1,8 +1,8 @@
 import { IsIn, validateSync } from 'class-validator';
 
-const PROCESSING_STATUS = 'PROCESSING';
-const PROCESSED_STATUS = 'PROCESSED';
-const FAILED_STATUS = 'FAILED';
+export const PROCESSING_STATUS = 'PROCESSING';
+export const PROCESSED_STATUS = 'PROCESSED';
+export const FAILED_STATUS = 'FAILED';
 
 export class ImageStatus {
   @IsIn([PROCESSING_STATUS, PROCESSED_STATUS, FAILED_STATUS])
