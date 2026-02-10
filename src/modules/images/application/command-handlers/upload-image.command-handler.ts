@@ -32,6 +32,8 @@ export class UploadImageCommandHandler implements ICommandHandler<
       this.eventPublisher.mergeObjectContext(image);
       await this.imageRepository.save(image);
       image.commit();
+
+      // todo: add image to the queue
     } catch {
       // todo: handle error
     }
