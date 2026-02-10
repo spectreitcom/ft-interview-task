@@ -22,11 +22,9 @@ model Image {
   title      String      @db.VarChar(120)
   storageKey String      @unique
   status     ImageStatus @default(PROCESSING)
-  error      String?
   width      Int
   height     Int
   mimeType   String      @db.VarChar(50)
-  url        String?
 
   @@map("images")
 }

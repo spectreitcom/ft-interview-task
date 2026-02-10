@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ImageUploaderService } from '../application/ports/image-uploader.service';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { extname } from 'node:path';
 import { randomUUID } from 'node:crypto';
@@ -36,5 +40,36 @@ export class S3ImageUploaderService implements ImageUploaderService {
     await this.s3Client.send(command);
 
     return key;
+  }
+
+  getObjectUrl(storageKey: string): string {
+    return `https://${this.bucket}.s3.${this.configService.get<string>('AWS_REGION')}.amazonaws.com/${storageKey}`;
+  }
+
+  async getObjectFromStorage(storageKey: string): Promise<Buffer> {
+    const command = new GetObjectCommand({
+      Bucket: this.bucket,
+      Key: storageKey,
+    });
+
+    const response = await this.s3Client.send(command);
+
+    if (!response.Body) {
+      throw new Error(`Object not found or has no body: ${storageKey}`);
+    }
+
+    const byteArray = await response.Body.transformToByteArray();
+    return Buffer.from(byteArray);
+  }
+
+  async overrideObject(storageKey: string, imageBuffer: Buffer): Promise<void> {
+    const command = new PutObjectCommand({
+      Bucket: this.bucket,
+      Key: storageKey,
+      Body: imageBuffer,
+      ACL: 'public-read',
+    });
+
+    await this.s3Client.send(command);
   }
 }

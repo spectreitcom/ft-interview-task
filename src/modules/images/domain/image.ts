@@ -7,7 +7,6 @@ import { ImageCreatedEvent } from './events/image-created.event';
 import { ImageProcessingFinishedEvent } from './events/image-processing-finished.event';
 import { ImageProcessingFailedEvent } from './events/image-processing-failed.event';
 import { ImageMimeType } from './value-objects/image-mime-type';
-import { ImageUrl } from './value-objects/image-url';
 
 type CreateImageInput = {
   imgWidth: number;
@@ -24,7 +23,6 @@ export class Image extends AggregateRoot {
   private readonly title: ImageTitle;
   private readonly mimeType: ImageMimeType;
   private status: ImageStatus;
-  private url?: ImageUrl;
 
   constructor(
     imageId: ImageId,
@@ -32,7 +30,6 @@ export class Image extends AggregateRoot {
     storageKey: string,
     title: ImageTitle,
     mimeType: ImageMimeType,
-    url?: ImageUrl,
   ) {
     super();
     this.imageId = imageId;
@@ -41,7 +38,6 @@ export class Image extends AggregateRoot {
     this.title = title;
     this.status = ImageStatus.processing();
     this.mimeType = mimeType;
-    this.url = url;
   }
 
   static create({
@@ -72,16 +68,15 @@ export class Image extends AggregateRoot {
     return image;
   }
 
-  finishProcessing(url: string) {
+  finishProcessing() {
     this.status = ImageStatus.processed();
-    this.url = ImageUrl.fromString(url);
     this.apply(
       new ImageProcessingFinishedEvent(
         this.imageId.value,
         this.title.value,
         this.imageSize.width,
         this.imageSize.height,
-        url,
+        this.storageKey,
       ),
     );
   }
@@ -113,9 +108,5 @@ export class Image extends AggregateRoot {
 
   getMimeType() {
     return this.mimeType;
-  }
-
-  getUrl() {
-    return this.url;
   }
 }

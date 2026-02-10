@@ -6,6 +6,6 @@ export class ImageProcessingFinishedEvent implements IEvent {
     public readonly title: string,
     public readonly width: number,
     public readonly height: number,
-    public readonly url: string,
+    public readonly storageKey: string,
   ) {}
 }
