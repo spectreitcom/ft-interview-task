@@ -9,7 +9,7 @@ import { ImageProcessingQueueService } from '../ports/image-processing-queue.ser
 @CommandHandler(UploadImageCommand)
 export class UploadImageCommandHandler implements ICommandHandler<
   UploadImageCommand,
-  void
+  string
 > {
   private readonly logger = new Logger(UploadImageCommandHandler.name);
 
@@ -20,7 +20,7 @@ export class UploadImageCommandHandler implements ICommandHandler<
     private readonly imageProcessingQueueService: ImageProcessingQueueService,
   ) {}
 
-  async execute(command: UploadImageCommand): Promise<void> {
+  async execute(command: UploadImageCommand): Promise<string> {
     const { file, width, height, title } = command;
 
     try {
@@ -39,6 +39,8 @@ export class UploadImageCommandHandler implements ICommandHandler<
       image.commit();
 
       await this.imageProcessingQueueService.enqueue(image.getImageId().value);
+
+      return image.getImageId().value;
     } catch (e) {
       this.logger.error('Failed to upload image', e);
       throw e;
