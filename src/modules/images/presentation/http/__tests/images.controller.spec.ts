@@ -8,6 +8,7 @@ import { UploadImageBodyDto } from '../dto/upload-image-body.dto';
 import { ImageRead } from '../../../application/query-handlers/types';
 import { PaginatedData } from '../../../../../shared/types';
 import { randomUUID } from 'node:crypto';
+import { PROCESSING_STATUS } from '../../../domain/value-objects/image-status';
 
 const createMockQueryBus = () => ({
   execute: jest.fn(),
@@ -54,7 +55,8 @@ describe('ImagesController', () => {
         file: 'nothing',
       };
 
-      commandBus.execute.mockResolvedValue(undefined);
+      const imageId = randomUUID();
+      commandBus.execute.mockResolvedValue(imageId);
 
       // act
       const result = await controller.uploadImage(file, body);
@@ -69,7 +71,7 @@ describe('ImagesController', () => {
           title: body.title,
         }),
       );
-      expect(result).toBeUndefined();
+      expect(result).toEqual({ id: imageId, status: PROCESSING_STATUS });
     });
   });
 
