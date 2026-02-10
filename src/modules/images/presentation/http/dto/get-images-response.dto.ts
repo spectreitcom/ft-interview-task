@@ -29,6 +29,20 @@ export class GetImageItemResponseDto {
     example: 100,
   })
   readonly height: number;
+
+  constructor(
+    id: string,
+    title: string,
+    url: string,
+    width: number,
+    height: number,
+  ) {
+    this.id = id;
+    this.title = title;
+    this.url = url;
+    this.width = width;
+    this.height = height;
+  }
 }
 
 export class GetImagesResponseDto {
@@ -43,4 +57,9 @@ export class GetImagesResponseDto {
     example: 100,
   })
   readonly total: number;
+
+  constructor(data: GetImageItemResponseDto[], total: number) {
+    this.data = data;
+    this.total = total;
+  }
 }
