@@ -1,12 +1,18 @@
 import {
+  Body,
   Controller,
+  FileTypeValidator,
   Get,
+  MaxFileSizeValidator,
   Param,
+  ParseFilePipe,
   ParseUUIDPipe,
   Post,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import { QueryBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { GetImagesQuery } from '../../application/queries/get-images.query';
 import { PaginatedData } from '../../../../shared/types';
 import { ImageRead } from '../../application/query-handlers/types';
@@ -15,19 +21,58 @@ import {
   ApiOperation,
   ApiNotFoundResponse,
   ApiOkResponse,
+  ApiCreatedResponse,
+  ApiBadRequestResponse,
+  ApiConsumes,
 } from '@nestjs/swagger';
 import { GetImagesQueryParamsDto } from './dto/get-images-query-params.dto';
 import {
   GetImageItemResponseDto,
   GetImagesResponseDto,
 } from './dto/get-images-response.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadImageCommand } from '../../application/commands/upload-image.command';
+import { UploadImageBodyDto } from './dto/upload-image-body.dto';
 
 @Controller('images')
 export class ImagesController {
-  constructor(private readonly queryBus: QueryBus) {}
+  constructor(
+    private readonly queryBus: QueryBus,
+    private readonly commandBus: CommandBus,
+  ) {}
 
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Uploads an image' })
+  @ApiCreatedResponse({
+    description: 'The image has been uploaded successfully',
+  })
+  @ApiBadRequestResponse({
+    description: 'Invalid payload',
+  })
   @Post()
-  async uploadImage() {}
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadImage(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 1024 * 1024 * 2 }),
+          new FileTypeValidator({
+            fileType: /^image\/(png|jpeg|webp|gif|svg+xml|tiff)$/,
+          }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+    @Body() body: UploadImageBodyDto,
+  ) {
+    const command = new UploadImageCommand(
+      file,
+      body.width,
+      body.height,
+      body.title,
+    );
+    return await this.commandBus.execute<UploadImageCommand, void>(command);
+  }
 
   @ApiOperation({ summary: 'Returns the list of images' })
   @ApiOkResponse({

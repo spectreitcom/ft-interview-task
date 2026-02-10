@@ -12,7 +12,7 @@ import { ImageUrl } from './value-objects/image-url';
 type CreateImageInput = {
   imgWidth: number;
   imgHeight: number;
-  storageKey: string;
+  imgStorageKey: string;
   imgTitle: string;
   imgMimeType: string;
 };
@@ -48,13 +48,13 @@ export class Image extends AggregateRoot {
     imgHeight,
     imgTitle,
     imgWidth,
-    storageKey,
+    imgStorageKey,
     imgMimeType,
   }: CreateImageInput) {
     const image = new Image(
       ImageId.create(),
       ImageSize.create(imgWidth, imgHeight),
-      storageKey,
+      imgStorageKey,
       ImageTitle.fromString(imgTitle),
       ImageMimeType.fromString(imgMimeType),
     );
@@ -64,7 +64,7 @@ export class Image extends AggregateRoot {
         image.imageId.value,
         imgWidth,
         imgHeight,
-        storageKey,
+        imgStorageKey,
         imgTitle,
         image.status.value,
       ),
