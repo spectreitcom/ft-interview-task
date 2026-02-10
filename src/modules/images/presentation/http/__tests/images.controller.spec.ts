@@ -6,7 +6,7 @@ import { GetImageObjectQuery } from '../../../application/queries/get-image-obje
 import { GetImagesQueryParamsDto } from '../dto/get-images-query-params.dto';
 import { UploadImageBodyDto } from '../dto/upload-image-body.dto';
 import { ImageRead } from '../../../application/query-handlers/types';
-import { PaginatedData } from '../../../../../shared/types';
+import { PaginatedData } from '../../../../../shared/types/types';
 import { randomUUID } from 'node:crypto';
 
 const createMockQueryBus = () => ({
