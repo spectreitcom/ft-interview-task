@@ -4,6 +4,7 @@ import {
   IsNumber,
   IsPositive,
   IsString,
+  Max,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -15,6 +16,7 @@ export class UploadImageBodyDto {
   @IsNumber()
   @IsPositive()
   @IsInt()
+  @Max(500)
   readonly width: number;
 
   @ApiProperty({
@@ -24,6 +26,7 @@ export class UploadImageBodyDto {
   @IsNumber()
   @IsPositive()
   @IsInt()
+  @Max(500)
   readonly height: number;
 
   @ApiProperty({

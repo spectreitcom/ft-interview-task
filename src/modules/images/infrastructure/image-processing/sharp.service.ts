@@ -10,6 +10,7 @@ export class SharpService {
   ): Promise<Buffer> {
     const image = sharp(imageBuffer, {
       failOn: 'error',
+      limitInputPixels: 1000 * 1000,
     });
     return image
       .resize({
