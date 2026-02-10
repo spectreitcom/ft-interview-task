@@ -3,6 +3,8 @@ import {
   Controller,
   FileTypeValidator,
   Get,
+  HttpCode,
+  HttpStatus,
   MaxFileSizeValidator,
   Param,
   ParseFilePipe,
@@ -21,9 +23,9 @@ import {
   ApiOperation,
   ApiNotFoundResponse,
   ApiOkResponse,
-  ApiCreatedResponse,
   ApiBadRequestResponse,
   ApiConsumes,
+  ApiAcceptedResponse,
 } from '@nestjs/swagger';
 import { GetImagesQueryParamsDto } from './dto/get-images-query-params.dto';
 import {
@@ -34,6 +36,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadImageCommand } from '../../application/commands/upload-image.command';
 import { UploadImageBodyDto } from './dto/upload-image-body.dto';
 import { allowedMimeTypeRegex } from '../../shared/utils';
+import { PROCESSING_STATUS } from '../../domain/value-objects/image-status';
 
 @Controller('images')
 export class ImagesController {
@@ -44,13 +47,21 @@ export class ImagesController {
 
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Uploads an image' })
-  @ApiCreatedResponse({
+  @ApiAcceptedResponse({
     description: 'The image has been uploaded successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        id: { type: 'string', format: 'uuid' },
+        status: { type: 'string', default: PROCESSING_STATUS },
+      },
+    },
   })
   @ApiBadRequestResponse({
     description: 'Invalid payload',
   })
   @Post()
+  @HttpCode(HttpStatus.ACCEPTED)
   @UseInterceptors(FileInterceptor('file'))
   async uploadImage(
     @UploadedFile(
@@ -72,7 +83,11 @@ export class ImagesController {
       body.height,
       body.title,
     );
-    return await this.commandBus.execute<UploadImageCommand, void>(command);
+    const imageId = await this.commandBus.execute<UploadImageCommand, void>(
+      command,
+    );
+
+    return { id: imageId, status: PROCESSING_STATUS };
   }
 
   @ApiOperation({ summary: 'Returns the list of images' })
