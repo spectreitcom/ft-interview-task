@@ -4,6 +4,7 @@ import { ImageRepository } from '../ports/image.repository';
 import { Image } from '../../domain/image';
 import { ImageUploaderService } from '../ports/image-uploader.service';
 import { Logger } from '@nestjs/common';
+import { ImageProcessingQueueService } from '../ports/image-processing-queue.service';
 
 @CommandHandler(UploadImageCommand)
 export class UploadImageCommandHandler implements ICommandHandler<
@@ -16,6 +17,7 @@ export class UploadImageCommandHandler implements ICommandHandler<
     private readonly imageRepository: ImageRepository,
     private readonly eventPublisher: EventPublisher,
     private readonly imageUploaderService: ImageUploaderService,
+    private readonly imageProcessingQueueService: ImageProcessingQueueService,
   ) {}
 
   async execute(command: UploadImageCommand): Promise<void> {
@@ -36,7 +38,7 @@ export class UploadImageCommandHandler implements ICommandHandler<
       await this.imageRepository.save(image);
       image.commit();
 
-      // todo: add image to the queue
+      await this.imageProcessingQueueService.enqueue(image.getImageId().value);
     } catch (e) {
       this.logger.error('Failed to upload image', e);
       throw e;
