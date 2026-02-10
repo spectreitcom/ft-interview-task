@@ -80,6 +80,7 @@ describe('ImagesController', () => {
       // arrange
       const queryParams: GetImagesQueryParamsDto = {
         page: 2,
+        pageSize: 5,
         title: 'cat',
       };
 
@@ -112,7 +113,13 @@ describe('ImagesController', () => {
 
       // assert
       expect(queryBus.execute).toHaveBeenCalledTimes(1);
-      expect(queryBus.execute).toHaveBeenCalledWith(expect.any(GetImagesQuery));
+      expect(queryBus.execute).toHaveBeenCalledWith(
+        new GetImagesQuery(
+          queryParams.page,
+          queryParams.pageSize,
+          queryParams.title,
+        ),
+      );
       expect(res).toEqual({
         data: images.data.map((i) => ({
           id: i.imageId,

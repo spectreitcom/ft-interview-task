@@ -98,7 +98,11 @@ export class ImagesController {
   async getImages(
     @Query() queryParamsDto: GetImagesQueryParamsDto,
   ): Promise<GetImagesResponseDto> {
-    const query = new GetImagesQuery(queryParamsDto.page, queryParamsDto.title);
+    const query = new GetImagesQuery(
+      queryParamsDto.page,
+      queryParamsDto.pageSize,
+      queryParamsDto.title,
+    );
     const result = await this.queryBus.execute<
       GetImagesQuery,
       PaginatedData<ImageRead>
