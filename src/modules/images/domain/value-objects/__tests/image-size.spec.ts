@@ -19,6 +19,7 @@ describe('ImageSize', () => {
       const height = 'invalid-height';
 
       // assert
+      // @ts-ignore
       expect(() => ImageSize.create(width, height)).toThrow();
     });
 
@@ -55,6 +56,7 @@ describe('ImageSize', () => {
       const height = undefined;
 
       // assert
+      // @ts-ignore
       expect(() => ImageSize.create(width, height)).toThrow();
     });
   });
