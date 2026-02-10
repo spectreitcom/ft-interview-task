@@ -1,4 +1,4 @@
-# FT Interview Task
+# FM Interview Task
 
 Projekt techniczny zbudowany przy użyciu frameworka NestJS, wykorzystujący Prismę jako ORM, Redis (BullMQ) do przetwarzania zadań w tle oraz AWS S3 do przechowywania plików.
 
