@@ -2,6 +2,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetImageObjectQuery } from '../queries/get-image-object.query';
 import { ImageRead } from './types';
 import { PrismaService } from '../../../../shared/prisma/prisma.service';
+import { AppError } from '../../../../shared/errors';
 
 @QueryHandler(GetImageObjectQuery)
 export class GetImageObjectQueryHandler implements IQueryHandler<
@@ -20,7 +21,10 @@ export class GetImageObjectQueryHandler implements IQueryHandler<
     });
 
     if (!imageRead) {
-      throw new Error(`Image with id ${imageId} not found`);
+      throw new AppError(
+        'ENTITY_NOT_FOUND',
+        `Image with id ${imageId} not found`,
+      );
     }
 
     return imageRead;
