@@ -11,6 +11,14 @@ export class BullmqImageProcessingQueueService implements ImageProcessingQueueSe
   ) {}
 
   async enqueue(imageId: string): Promise<void> {
-    await this.queue.add('process-image', { imageId });
+    await this.queue.add(
+      'process-image',
+      { imageId },
+      {
+        removeOnFail: true,
+        removeOnComplete: true,
+        jobId: imageId,
+      },
+    );
   }
 }
