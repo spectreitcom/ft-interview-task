@@ -18,7 +18,7 @@ import { HttpExceptionFilter } from './shared/errors/http-exception.filter';
       throttlers: [
         {
           ttl: 60 * 1000,
-          limit: 30,
+          limit: 100,
         },
       ],
     }),
