@@ -11,6 +11,7 @@ Projekt techniczny zbudowany przy użyciu frameworka NestJS, wykorzystujący Pri
 ## Instalacja
 
 1. Sklonuj repozytorium:
+
    ```bash
    git clone https://github.com/spectreitcom/ft-interview-task
    cd ft-interview-task
@@ -24,6 +25,7 @@ Projekt techniczny zbudowany przy użyciu frameworka NestJS, wykorzystujący Pri
 ## Konfiguracja środowiska
 
 1. Skopiuj plik przykładowy `.env-example` do `.env`:
+
    ```bash
    cp .env-example .env
    ```
@@ -39,6 +41,7 @@ Projekt techniczny zbudowany przy użyciu frameworka NestJS, wykorzystujący Pri
 ## Uruchomienie infrastruktury
 
 Uruchom bazę danych (PostgreSQL) oraz Redis przy pomocy Docker Compose:
+
 ```bash
 docker-compose up -d
 ```
@@ -48,6 +51,7 @@ docker-compose up -d
 Przed uruchomieniem aplikacji należy wygenerować klienta Prismy i wykonać migracje:
 
 1. Generowanie klienta Prisma:
+
    ```bash
    npm run prisma:generate
    ```
@@ -60,11 +64,13 @@ Przed uruchomieniem aplikacji należy wygenerować klienta Prismy i wykonać mig
 ## Uruchomienie aplikacji
 
 ### Tryb deweloperski
+
 ```bash
 npm run start:dev
 ```
 
 ### Tryb produkcyjny
+
 ```bash
 npm run build
 npm run start:prod
