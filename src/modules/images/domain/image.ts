@@ -31,13 +31,14 @@ export class Image extends AggregateRoot {
     storageKey: string,
     title: ImageTitle,
     mimeType: ImageMimeType,
+    status: ImageStatus,
   ) {
     super();
     this.imageId = imageId;
     this.imageSize = imageSize;
     this.storageKey = storageKey;
     this.title = title;
-    this.status = ImageStatus.processing();
+    this.status = status;
     this.mimeType = mimeType;
   }
 
@@ -54,6 +55,7 @@ export class Image extends AggregateRoot {
       imgStorageKey,
       ImageTitle.fromString(imgTitle),
       ImageMimeType.fromString(imgMimeType),
+      ImageStatus.processing(),
     );
 
     image.apply(

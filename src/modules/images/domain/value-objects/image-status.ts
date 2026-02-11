@@ -36,6 +36,10 @@ export class ImageStatus {
     return new ImageStatus(FAILED_STATUS);
   }
 
+  static fromString(value: string) {
+    return new ImageStatus(value);
+  }
+
   equals(status: ImageStatus) {
     return this._value === status.value;
   }

@@ -6,6 +6,7 @@ import { ImageStatus } from '@prisma/client';
 import { ImageId } from '../../domain/value-objects/image-id';
 import { ImageSize } from '../../domain/value-objects/image-size';
 import { ImageTitle } from '../../domain/value-objects/image-title';
+import { ImageStatus as ImageStatusVO } from '../../domain/value-objects/image-status';
 import { ImageMimeType } from '../../domain/value-objects/image-mime-type';
 
 @Injectable()
@@ -49,6 +50,7 @@ export class PrismaImageRepository implements ImageRepository {
       record.storageKey,
       ImageTitle.fromString(record.title),
       ImageMimeType.fromString(record.mimeType),
+      ImageStatusVO.fromString(record.status),
     );
   }
 }
