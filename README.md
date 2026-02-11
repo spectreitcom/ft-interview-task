@@ -63,22 +63,13 @@ Przed uruchomieniem aplikacji należy wygenerować klienta Prismy i wykonać mig
 
 ## Uruchomienie aplikacji
 
-### Tryb deweloperski
-
 ```bash
 npm run start:dev
 ```
 
-### Tryb produkcyjny
-
-```bash
-npm run build
-npm run start:prod
-```
-
 ## Testy
 
-Projekt zawiera testy jednostkowe oraz E2E:
+Projekt zawiera testy jednostkowe:
 
 - Testy jednostkowe: `npm run test`
 - Pokrycie testami: `npm run test:cov`
