@@ -67,4 +67,25 @@ describe('ImageStatus', () => {
       expect(imageStatus.value).toEqual(PROCESSING_STATUS);
     });
   });
+
+  describe('fromString', () => {
+    it('should create an ImageStatus object from a string', () => {
+      // given
+      const imageStatus = ImageStatus.fromString(PROCESSING_STATUS);
+
+      // assert
+      expect(imageStatus).not.toBeNull();
+      expect(imageStatus).toBeInstanceOf(ImageStatus);
+    });
+
+    it('should throw an error if the value is not a valid string', () => {
+      // given
+      const invalidStatus = 123;
+
+      // assert
+      expect(() =>
+        ImageStatus.fromString(invalidStatus as unknown as string),
+      ).toThrow();
+    });
+  });
 });
