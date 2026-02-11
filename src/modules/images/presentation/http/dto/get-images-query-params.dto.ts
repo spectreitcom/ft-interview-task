@@ -1,4 +1,10 @@
-import { IsNumber, IsOptional, IsPositive, IsString } from 'class-validator';
+import {
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+} from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class GetImagesQueryParamsDto {
@@ -9,6 +15,7 @@ export class GetImagesQueryParamsDto {
   })
   @IsNumber()
   @IsPositive()
+  @IsInt()
   @IsOptional()
   readonly page: number = 1;
 
@@ -19,6 +26,7 @@ export class GetImagesQueryParamsDto {
   })
   @IsNumber()
   @IsPositive()
+  @IsInt()
   @IsOptional()
   readonly pageSize: number = 10;
 
