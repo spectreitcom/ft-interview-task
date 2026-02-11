@@ -22,3 +22,5 @@ export class AppError extends Error {
     super(message);
   }
 }
+
+export * from './http-exception.filter';
