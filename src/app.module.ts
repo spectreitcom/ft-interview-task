@@ -6,7 +6,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { BullModule } from '@nestjs/bullmq';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
-import { HttpExceptionFilter } from './shared/errors/http-exception.filter';
+import { HttpExceptionFilter } from './shared/errors';
 
 @Module({
   imports: [
